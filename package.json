@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "自用版",
   "license": "ISC",
   "bin": {
     "ee-core": "./bin/tools.js"
