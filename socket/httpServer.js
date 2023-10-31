@@ -64,7 +64,7 @@ class HttpServer {
       })
 
     // 从外部导入自定义中间件
-    httpServer?.use&&httpServer.customUse(koaApp);
+    httpServer?.customUse&&httpServer.customUse(koaApp);
 
     koaApp.use(this.dispatch);
 
