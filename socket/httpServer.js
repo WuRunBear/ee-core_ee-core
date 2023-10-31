@@ -62,10 +62,11 @@ class HttpServer {
         ctx.eeApp = app;
         await next();
       })
-      .use(this.dispatch);
 
     // 从外部导入自定义中间件
     httpServer?.use&&httpServer.customUse(koaApp);
+
+    koaApp.use(this.dispatch);
 
     let msg = '[ee-core] [socket/http] server is: ' + url;
 

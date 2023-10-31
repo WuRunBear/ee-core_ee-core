@@ -257,7 +257,8 @@ module.exports = appInfo => {
     filterRequest: {
       uris:  [],
       returnData: ''
-    }
+    },
+    customUse: null
   };  
 
   /* 主进程加载的地址 */
