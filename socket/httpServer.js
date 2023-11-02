@@ -105,6 +105,8 @@ class HttpServer {
     ctx.eeApp.request = ctx.request;
     ctx.eeApp.response = ctx.response;
 
+    config.router.beforeEach&&config.router.beforeEach(ctx);
+
     try {
       // 找函数
       // 去除开头的 '/'
@@ -137,8 +139,12 @@ class HttpServer {
       const result = await fn.call(ctx.eeApp, args);
       ctx.response.body = result;
     } catch (err) {
+      config.router.onError&&config.router.onError(ctx, err);
+  
       Log.coreLogger.error('[ee-core/httpServer] throw error:', err);
     }
+
+    config.router.afterEach&&config.router.afterEach(ctx);
 
     await next();
   }

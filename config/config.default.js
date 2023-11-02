@@ -258,6 +258,11 @@ module.exports = appInfo => {
       uris:  [],
       returnData: ''
     },
+    router: {
+      beforeEach: null,
+      afterEach: null,
+      onError: null,
+    },
     customUse: null
   };  
 
