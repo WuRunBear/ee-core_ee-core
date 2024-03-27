@@ -66,7 +66,7 @@ class HttpServer {
     // 从外部导入自定义中间件
     httpServer?.customUse&&httpServer.customUse(koaApp);
 
-    koaApp.use(this.dispatch);
+    koaApp.use(this._dispatch);
 
     let msg = '[ee-core] [socket/http] server is: ' + url;
 
