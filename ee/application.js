@@ -57,7 +57,7 @@ class Appliaction extends EeApp {
     }
 
     // normalize env
-    //env.NODE_ENV = options.env;
+    env.EE_APP_NAME = options.appName;
     env.EE_HOME = options.homeDir;
     env.EE_BASE_DIR = options.baseDir;
     env.EE_SERVER_ENV = options.env;
@@ -88,7 +88,7 @@ class Appliaction extends EeApp {
     await this.createPorts();
 
     await this.startSocket();
-
+    
     await this.ready();
 
     await this.createElectronApp();

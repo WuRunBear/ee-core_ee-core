@@ -290,7 +290,7 @@ module.exports = appInfo => {
    * 硬件加速
    */
   config.hardGpu = {
-    enable: false
+    enable: true
   };
 
   /**
@@ -299,11 +299,6 @@ module.exports = appInfo => {
   config.storage = {
     dir: path.join(appInfo.root, 'data'),
   };
-
-  /**
-   * loading页（废弃）
-   */
-  config.loadingPage = false;
 
   /**
    * addons
@@ -322,6 +317,20 @@ module.exports = appInfo => {
     childExit: true,
     rendererExit: true,
   };
+
+  /**
+   * Cross-language service
+   * 跨语言服务
+   * 例如：执行go的二进制程序
+   */
+  config.cross = {};   
+  
+  /**
+   * jobs
+   */
+  config.jobs = {
+    messageLog: true
+  };  
 
   return config;
 };

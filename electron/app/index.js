@@ -3,6 +3,7 @@ const EE = require('../../ee');
 const Log = require('../../log');
 const Electron = require('../index');
 const UtilsIs = require('../../utils/is');
+const Cross = require('../../cross');
 
 /**
  * CoreElectronApp (框架封装的electron app对象)
@@ -18,15 +19,20 @@ const CoreElectronApp = {
     const gotTheLock = app.requestSingleInstanceLock();
     if (!gotTheLock) {
       app.quit();
-      return;
     }
-  
+
     app.whenReady().then(() => {
       CoreApp.createWindow();
     })
-    
+
+    // 显示首次打开的窗口
+    app.on('second-instance', (event, argv, workingDirectory) => {
+      Log.coreLogger.info('[ee-core] [lib/eeApp] second-instance');
+      CoreApp.mainWindow.show();
+    });
+
     app.on('window-all-closed', () => {
-      if (!UtilsIs.macOS) {
+      if (!UtilsIs.macOS()) {
         Log.coreLogger.info('[ee-core] [lib/eeApp] window-all-closed quit');
         CoreApp.appQuit();
       }
@@ -34,6 +40,9 @@ const CoreElectronApp = {
 
     app.on('before-quit', () => {
       Electron.extra.closeWindow = true;
+
+      // kill cross services
+      Cross.killAll();
     })
 
     if (CoreApp.config.hardGpu.enable == false) {

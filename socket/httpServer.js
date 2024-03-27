@@ -29,13 +29,13 @@ class HttpServer {
       throw new Error('[ee-core] [socket/HttpServer] http port required, and must be a number !');
     }
 
-    this.create();
+    this._create();
   }
 
   /**
    * 创建服务
    */
-  create () {
+  _create () {
     const app = this.app;
     const httpServer = this.options;
     const isHttps = httpServer?.https?.enable ?? false;
@@ -90,13 +90,14 @@ class HttpServer {
   /**
    * 路由分发
    */
-  async dispatch (ctx, next) {
+  async _dispatch (ctx, next) {
     const config = ctx.eeApp.config.httpServer;
     let uriPath = ctx.request.path;
     const method = ctx.request.method;
     let params = ctx.request.query;
     params = is.object(params) ? JSON.parse(JSON.stringify(params)) : {};
     const body = ctx.request.body;
+    const files = ctx.request.files;
 
     // 默认
     ctx.response.status = 200;
@@ -123,7 +124,10 @@ class HttpServer {
         uriPath = 'controller/' + uriPath;
       }
       const cmd = uriPath.split('/').join('.');
-      const args = (method == 'POST') ? body : params;
+      const args = (method == 'POST') ? (ctx.request.header['content-type'] && ctx.request.header['content-type'].startsWith('multipart/form-data;') ? files : body) : params;
+      args.files = ctx.request.files;
+      args.body = ctx.request.body;
+      args.query = ctx.request.query;
       let fn = null;
       if (is.string(cmd)) {
         const actions = cmd.split('.');

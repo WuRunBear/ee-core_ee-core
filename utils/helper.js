@@ -5,6 +5,7 @@ const is = require('is-type-of');
 const co = require('./co');
 const path = require('path');
 const chalk = require('chalk');
+const Pargv = require('./pargv');
 
 const _basePath = process.cwd();
 
@@ -172,4 +173,49 @@ exports.loadConfig = function(prop) {
 
 exports.sleep = function(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+exports.replaceArgsValue = function(argv, key, value) {
+  key = key + "=";
+  for (let i = 0; i < argv.length; i++) {
+    let item = argv[i];
+    let pos = item.indexOf(key);
+    if (pos !== -1) {
+      pos = pos + key.length;
+      let tmpStr = item.substring(0, pos);
+      argv[i] = tmpStr + value;
+      break;
+    }
+  }
+
+  return argv;
+};
+
+exports.getValueFromArgv = function(argv, key) {
+  const argvObj = Pargv(argv);
+  if (argvObj.hasOwnProperty(key)) {
+    return argvObj[key];
+  }
+
+  // match search
+  key = key + "=";
+  let value;
+  for (let i = 0; i < argv.length; i++) {
+    let item = argv[i];
+    let pos = item.indexOf(key);
+    if (pos !== -1) {
+      pos = pos + key.length;
+      value = item.substring(pos);
+      break;
+    }
+  }
+
+  return value;
+};
+
+exports.fileIsExist = function(filepath) {
+  if (fs.existsSync(filepath) && fs.statSync(filepath).isFile()) {
+    return true;
+  }
+  return false;
 };
